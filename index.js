@@ -15,17 +15,19 @@ app.get('/bling/callback', async (req, res) => {
   const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
 
   try {
-    const result = await axios.post('https://www.bling.com.br/Api/v3/oauth/token', null, {
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      params: {
+    const result = await axios.post('https://www.bling.com.br/Api/v3/oauth/token', 
+      new URLSearchParams({
         grant_type: 'authorization_code',
         code,
         redirect_uri: REDIRECT_URI
+      }),
+      {
+        headers: {
+          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }
-    });
+    );
 
     const { access_token, refresh_token, expires_in } = result.data;
 
